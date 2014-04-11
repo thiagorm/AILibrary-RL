@@ -59,15 +59,15 @@ int ExplorationMethods::verifyMaxAction(State state)
 	return action;
 }
 
-int ExplorationMethods::getActionEgreedy(State state, float eGreedy)
+int ExplorationMethods::getActionEgreedy(State state, RLParameters rlParameters)
 {
 	float random_eGreedy = 0;
 	int random_action;
 	int action = NULL;
 	
 	random_eGreedy = (float) rand()/(float)RAND_MAX;
-
-	if(eGreedy > random_eGreedy)
+	
+	if(rlParameters.getEGreedy() > random_eGreedy)
 	{
 		//chosing the random action
 		action = ((rand()%state.getNumberActions()));

@@ -2,9 +2,11 @@
 #define _ExplorationMethods_
 
 #include "State.h"
+#include "RLParameters.h"
 
 class ExplorationMethods
 {
+
 	public:
 
 		ExplorationMethods();
@@ -12,7 +14,7 @@ class ExplorationMethods
 
 
 		int verifyMaxAction(State state);
-		int getActionEgreedy(State state, float eGreedy);
+		int getActionEgreedy(State state, RLParameters rlParameters);
 
 
 };

@@ -12,7 +12,7 @@ QLearningElegibilityTraces::~QLearningElegibilityTraces()
 
 double QLearningElegibilityTraces::QLearningETCalculation(State state, State nextState, int action, float reward, float gamma, float alfa, float lambda, float eGreedy, int nexti, int nextj)
 {
-	this->nextAction = explorationMethods.getActionEgreedy(state, eGreedy);
+//	this->nextAction = explorationMethods.getActionEgreedy(state);
 
 	this->elegibilityTracesFeatures.setAStar(state, nextAction);
 

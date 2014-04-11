@@ -25,8 +25,6 @@ class RLFeatures
 		void setEgreedy(float value);
 		void setLambda(float value);
 
-		
-		double verifyMaxValue(State state);
 };
 
 

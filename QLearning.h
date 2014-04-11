@@ -3,25 +3,30 @@
 
 #include "ExplorationMethods.h"
 #include "GlobalVariables.h"
-#include "RLFeatures.h"
+//#include "RLFeatures.h"
+#include "RLParameters.h"
 #include "State.h"
 
 class QLearning
 {
 
-	RLFeatures rlFeatures;
+	//RLFeatures rlFeatures;
 	ExplorationMethods explorationMethods;
 
 	public:
 
+		RLParameters rlParameters;
 		 QLearning();
 		~QLearning();
 
-		double QLearningCalculation(State state, State nextState, int action, float reward, float alfa, float gamma);
+		void Agent_Initialization(float alpha, float gamma, float eGreedy);
+		void Agent_Initialization(float alpha, float gamma, float eGreedy, float lambda);
 
-		ExplorationMethods getExplorationMethod();
+		double Agent_LearningCalculation(State state, State nextState, int action, float reward);
 
+		ExplorationMethods Agent_Exploration();
 
+		double verifyMaxValue(State state);
 
 };
 

@@ -70,21 +70,3 @@ void RLFeatures::setLambda(float value)
 	this->lambda = value;
 }
 
-double RLFeatures::verifyMaxValue(State state)
-{
-	double maior = 0;
-	int i = 0;
-	
-	maior = state.actions[0];
-	
-	for(i = 1; i < state.getNumberActions(); i++)
-	{
-		if(state.actions[i] > maior)
-		{
-			maior = state.actions[i];
-		}
-	}
-	
-	return maior;
-}
-

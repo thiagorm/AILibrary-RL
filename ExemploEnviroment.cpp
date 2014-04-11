@@ -2,11 +2,11 @@
 
 #include <stdio.h>
 #include <conio.h>
-#include "DynaMazeEnviroment.h"
+#include "ExemploEnviroment.h"
 
 using namespace std;
 
-DynaMazeEnviroment::DynaMazeEnviroment()
+ExemploEnviroment::ExemploEnviroment()
 {
 	this->actions = 0;
 	this->count = 0; 
@@ -24,7 +24,7 @@ DynaMazeEnviroment::DynaMazeEnviroment()
 	this->j = 0;
 }
 
-DynaMazeEnviroment::DynaMazeEnviroment(float reward, float reward_goal)
+ExemploEnviroment::ExemploEnviroment(float reward, float reward_goal)
 {
 	this->actions = 0;
 	this->count = 0; 
@@ -43,7 +43,7 @@ DynaMazeEnviroment::DynaMazeEnviroment(float reward, float reward_goal)
 
 }
 
-DynaMazeEnviroment::~DynaMazeEnviroment()
+ExemploEnviroment::~ExemploEnviroment()
 {
 	this->actions = NULL;
 	this->count = NULL; 
@@ -59,7 +59,7 @@ DynaMazeEnviroment::~DynaMazeEnviroment()
 	this->j = NULL;
 }
 
-void DynaMazeEnviroment::Enviromet_Initialization(int numberActions, float reward, float reward_goal)
+void ExemploEnviroment::Enviroment_Initialization(int numberActions, float reward, float reward_goal)
 {
 	for(i = 0; i < L; i++)
 	{
@@ -69,13 +69,10 @@ void DynaMazeEnviroment::Enviromet_Initialization(int numberActions, float rewar
 			grid[i][j].setActions(grid[i][j].getNumberActions());
 			for(k = 0; k < grid[i][j].getNumberActions(); k++)
 			{
-				if((i == 1 && j == 2) || (i == 2 && j == 2) || (i == 3 && j == 2))
+				if(i == 1 && j == 1) 
 					grid[i][j].actions[k] = WALL;
-				else if(i == 4 && j == 5)
+				else if(i == 1 && j == 2) 
 					grid[i][j].actions[k] = WALL;
-				else if((i == 0 && j == 7) || (i == 1 && j == 7) || (i == 2 && j == 7))
-					grid[i][j].actions[k] = WALL;
-				//else if(i == 0 && j == 8)
 				else
 					grid[i][j].actions[k] = 0;
 
@@ -83,19 +80,18 @@ void DynaMazeEnviroment::Enviromet_Initialization(int numberActions, float rewar
 		}
 	}
 
-	this->i = 2;
+	this->i = 1;
 	this->j = 0;
-
 	this->reward = reward;
 	this->reward_goal = reward_goal;
 }
 
-void DynaMazeEnviroment::Enviroment_Reset(int *i, int *j)//, DataStorage dataStorage)
+void ExemploEnviroment::Enviroment_Reset(int *i, int *j)//, DataStorage dataStorage)
 {
-	if(*i == 0 && *j == 8)
+	if((*i == 0 && *j == 3))
 	{
 		count++;
-		*i = 2;
+		*i = 1;
 		*j = 0;
 		//dataStorage.recordRewards(total_reward);
 		//dataStorage.recordActions(actions);
@@ -104,14 +100,14 @@ void DynaMazeEnviroment::Enviroment_Reset(int *i, int *j)//, DataStorage dataSto
 	}
 }
 
-void DynaMazeEnviroment::Enviroment_Loop(SARSA sarsa)//, QLearning qLearning, DataStorage dataStorage, ExplorationMethods explorationMethods, RLFeatures rlFeatures)
+void ExemploEnviroment::Enviroment_Loop(QLearning qLearning)//, DataStorage dataStorage, ExplorationMethods explorationMethods)
 {
-
+	
 	//while(count != convergence_time)
 	//{
 
-		action = sarsa.Agent_Exploration().getActionEgreedy(grid[i][j], sarsa.rlParameters);
-		
+	action = qLearning.Agent_Exploration().getActionEgreedy(grid[i][j], qLearning.rlParameters);
+
 		switch(action)
 		{
 			//Ação UP escolhida
@@ -120,13 +116,13 @@ void DynaMazeEnviroment::Enviroment_Loop(SARSA sarsa)//, QLearning qLearning, Da
 				{
 					if(grid[i-1][j].actions[action] != WALL)
 					{
-						//maxQValue = rlFeatures.verifyMaxValue(grid[i-1][j]);
+						//maxQValue = qLearning.verifyMaxValue(grid[i-1][j]);
 						this->nextState_i = i-1;
 						this->nextState_j = j;
-						if(i-1 == 0 && j == 8)
-							grid[i][j].actions[action] = sarsa.Agent_LearningCalculation(grid[i][j], grid[nextState_i][nextState_j], action, reward_goal);
+						if(i-1 == 0 && j == 3)
+							grid[i][j].actions[action] = qLearning.Agent_LearningCalculation(grid[i][j], grid[nextState_i][nextState_j], action, reward_goal);
 						else
-							grid[i][j].actions[action] = sarsa.Agent_LearningCalculation(grid[i][j], grid[nextState_i][nextState_j], action,reward);
+							grid[i][j].actions[action] = qLearning.Agent_LearningCalculation(grid[i][j], grid[nextState_i][nextState_j], action,reward);
 						//cout<<grid[i][j].actions[action];
 						//getch();
 						i--;
@@ -143,13 +139,13 @@ void DynaMazeEnviroment::Enviroment_Loop(SARSA sarsa)//, QLearning qLearning, Da
 				{
 					if(grid[i+1][j].actions[action] != WALL)
 					{
-						//maxQValue = rlFeatures.verifyMaxValue(grid[i+1][j]);
+						//maxQValue = qLearning.verifyMaxValue(grid[i+1][j]);
 						this->nextState_i = i+1;
 						this->nextState_j = j;
-						if(i+1 == 0 && j == 8)
-							grid[i][j].actions[action] = sarsa.Agent_LearningCalculation(grid[i][j], grid[nextState_i][nextState_j], action,reward_goal);
+						if(i+1 == 0 && j == 3)
+							grid[i][j].actions[action] = qLearning.Agent_LearningCalculation(grid[i][j], grid[nextState_i][nextState_j], action,reward_goal);
 						else 
-							grid[i][j].actions[action] = sarsa.Agent_LearningCalculation(grid[i][j], grid[nextState_i][nextState_j], action,reward);
+							grid[i][j].actions[action] = qLearning.Agent_LearningCalculation(grid[i][j], grid[nextState_i][nextState_j], action,reward);
 						//cout<<grid[i][j].actions[action];
 						//getch();
 						i++;
@@ -166,13 +162,13 @@ void DynaMazeEnviroment::Enviroment_Loop(SARSA sarsa)//, QLearning qLearning, Da
 				{
 					if(grid[i][j-1].actions[action] != WALL)
 					{
-						//maxQValue = rlFeatures.verifyMaxValue(grid[i][j-1]);
+						//maxQValue = qLearning.verifyMaxValue(grid[i][j-1]);
 						this->nextState_i = i;
 						this->nextState_j = j-1;
-						if(i == 0 && j-1 == 8)
-							grid[i][j].actions[action] = sarsa.Agent_LearningCalculation(grid[i][j], grid[nextState_i][nextState_j], action,reward_goal);
+						if(i == 0 && j-1 == 3)
+							grid[i][j].actions[action] = qLearning.Agent_LearningCalculation(grid[i][j], grid[nextState_i][nextState_j], action,reward_goal);
 						else
-							grid[i][j].actions[action] = sarsa.Agent_LearningCalculation(grid[i][j], grid[nextState_i][nextState_j], action,reward);
+							grid[i][j].actions[action] = qLearning.Agent_LearningCalculation(grid[i][j], grid[nextState_i][nextState_j], action,reward);
 						//cout<<grid[i][j].actions[action];
 						//getch();
 						j--;
@@ -189,13 +185,13 @@ void DynaMazeEnviroment::Enviroment_Loop(SARSA sarsa)//, QLearning qLearning, Da
 				{
 					if(grid[i][j+1].actions[action] != WALL)
 					{
-						//maxQValue = rlFeatures.verifyMaxValue(grid[i][j+1]);
+						//maxQValue = qLearning.verifyMaxValue(grid[i][j+1]);
 						this->nextState_i = i;
 						this->nextState_j = j+1;
-						if(i == 0 && j+1 == 8)
-							grid[i][j].actions[action] = sarsa.Agent_LearningCalculation(grid[i][j], grid[nextState_i][nextState_j], action,reward_goal);
+						if(i == 0 && j+1 == 3)
+							grid[i][j].actions[action] = qLearning.Agent_LearningCalculation(grid[i][j], grid[nextState_i][nextState_j], action,reward_goal);
 						else
-							grid[i][j].actions[action] = sarsa.Agent_LearningCalculation(grid[i][j], grid[nextState_i][nextState_j], action, reward);
+							grid[i][j].actions[action] = qLearning.Agent_LearningCalculation(grid[i][j], grid[nextState_i][nextState_j], action, reward);
 						//cout<<grid[i][j].actions[action];
 						//getch();
 						j++;
@@ -204,6 +200,7 @@ void DynaMazeEnviroment::Enviroment_Loop(SARSA sarsa)//, QLearning qLearning, Da
 				}
 				actions++;
 			break;	
+
 		}
 			
 		//verificação de episodio completo

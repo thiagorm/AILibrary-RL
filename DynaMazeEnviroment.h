@@ -11,29 +11,32 @@
 #include "QLearning.h"
 #include "SARSA.h"
 
+#define WALL -999
+
 class DynaMazeEnviroment
 {
 	
-	State grid[L][C];
 	int actions;
-	int count, action, k, l;
+	int action, k, l;
 	float maxQValue, reward, reward_goal;
 	float total_reward;
 	int nextAction;
 	int nextState_i;
 	int nextState_j;
 	int i, j;
-	PrintEnviroments printEnviroments;
 
 	public:
+		int count;
+		State grid[L][C];
+		PrintEnviroments printEnviroments;
 
 		 DynaMazeEnviroment();
 		 DynaMazeEnviroment(float reward, float reward_goal);
 		~DynaMazeEnviroment();
 
-		void convergenceLoop(SARSA sarsa, QLearning qLearning, DataStorage dataStorage, ExplorationMethods explorationMethods, RLFeatures rlFeatures);
-		void reset(int *i, int *j, DataStorage dataStorage);
-		void inicializationGrid(int numberActions);
+		void Enviroment_Loop(SARSA sarsa);//, QLearning qLearning, DataStorage dataStorage, ExplorationMethods explorationMethods, RLFeatures rlFeatures);
+		void Enviroment_Reset(int *i, int *j);//, DataStorage dataStorage);
+		void Enviromet_Initialization(int numberActions, float reward, float reward_goal);
 };
 
 

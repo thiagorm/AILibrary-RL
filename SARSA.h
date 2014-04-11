@@ -2,23 +2,28 @@
 #define _SARSA_
 
 #include "ExplorationMethods.h"
-#include "RLFeatures.h"
+//#include "RLFeatures.h"
+#include "RLParameters.h"
 #include "State.h"
 
 class SARSA
 {
 
-	RLFeatures rlFeatures;
+	//RLFeatures rlFeatures;
 	ExplorationMethods explorationMethods;
 
 	public:
+		RLParameters rlParameters;
 
 		SARSA();
 		~SARSA();
 
-		double SARSACalculation(State state, State nextState, int action, float reward, float alfa, float gamma, float eGreedy);
+		void Agent_Initialization(float alpha, float gamma, float eGreedy);
+		void Agent_Initialization(float alpha, float gamma, float eGreedy, float lambda);
 
-		ExplorationMethods getExplorationMethod();
+		double Agent_LearningCalculation(State state, State nextState, int action, float reward);
+
+		ExplorationMethods Agent_Exploration();
 
 
 };
